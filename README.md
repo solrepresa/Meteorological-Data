@@ -10,4 +10,4 @@ Datos de superficie:
 http://weather.uwyo.edu/surface/meteorogram/samerica.shtml
 
 
-Ver código en bash para sistematizar la descarga
+Ver código en bash para automatizar la descarga
