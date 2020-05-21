@@ -1,0 +1,40 @@
+#!/bin/bash
+
+# elimino el archivo con todos los datos viejos
+rm todo.dat
+
+#loop sobre los años indicados
+for year in 2013 2014 2015 2016 2017
+#loop sobre los meses del año
+do
+   for month in 01 02 03 04 05 06 07 08 09 10 11 12
+   do
+#Generamos peticion de archivo segun año y mes|
+      name=sounding?region=samer\&TYPE=TEXT%3ALIST\&YEAR=$year\&MONTH=$month\&FROM=all\&TO=2712\&STNM=87576
+#Ponemos el sitio de donde sacar los datos
+	true=http://weather.uwyo.edu/cgi-bin/$name
+# obtenemos los datos via internet
+	wget $true
+# cambiamos el nombre del archivo por uno identificado por año y mes
+     new=datos-$year-$month.dat
+     mv $name $new
+# hacemos una limpieza del archivo dejando solo tablas. s-gawk debe estar
+# en el directorio donde se corra este script
+     gawk -f s-gawk $new >> todo.dat
+   done
+done
+# En todo.dat me quedaron las tablas de todos los años y meses ordenadas por
+# fechas
+
+# limpio basura despues de la fecha. Archivo final salida.dat
+sed s/'<\/H2>'// todo.dat > /tmp/auch
+# Meses de tres letras a números
+sed 's/Jan/01/;s/Feb/02/;s/Mar/03/;s/Apr/04/;s/May/05/;s/Jun/06/;s/Jul/07/;s/Aug/08/;s/Sep/09/;s/Oct/10/;s/Nov/11/;s/Dec/12/' /tmp/auch > salida.dat
+rm /tmp/auch
+
+
+
+#wget 'http://weather.uwyo.edu/cgi-bin/sounding?region=samer&TYPE=TEXT%3ALIST&YEAR=2018&MONTH=01&FROM=all&TO=2712&STNM=87576'
+
+
+#gawk -f s-gawk archivo-descargado > archivo-limpio
